@@ -1,47 +1,65 @@
-const pokemonList = document.getElementById('pokemonList')
-const loadMoreButton = document.getElementById('loadMoreButton')
+let currentListIndex
+let pokemonListLimit = 20
+window.onload = buildList
 
-const maxRecords = 151
-const limit = 10
-let offset = 0;
-
-function convertPokemonToLi(pokemon) {
-    return `
-        <li class="pokemon ${pokemon.type}">
-            <span class="number">#${pokemon.number}</span>
-            <span class="name">${pokemon.name}</span>
-
-            <div class="detail">
-                <ol class="types">
-                    ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
-                </ol>
-
-                <img src="${pokemon.photo}"
-                     alt="${pokemon.name}">
-            </div>
-        </li>
-    `
+async function buildList() {
+        currentListIndex = 0
+        await construirLista()
+        renderizarItemPokemon(currentPokeList, currentListIndex, pokemonListLimit)
+        nextPage.disabled = false
 }
 
-function loadPokemonItens(offset, limit) {
-    pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
-        const newHtml = pokemons.map(convertPokemonToLi).join('')
-        pokemonList.innerHTML += newHtml
-    })
+function cleanList() {
+        const pokedex = document.querySelector('main')
+        const divCarregando = document.getElementById('load')
+        while (pokedex.hasChildNodes() && pokedex.lastChild !== divCarregando) {
+                pokedex.removeChild(pokedex.lastChild)
+        }
+
+        divCarregando.setAttribute('style', 'display:block')
 }
 
-loadPokemonItens(offset, limit)
-
-loadMoreButton.addEventListener('click', () => {
-    offset += limit
-    const qtdRecordsWithNexPage = offset + limit
-
-    if (qtdRecordsWithNexPage >= maxRecords) {
-        const newLimit = maxRecords - offset
-        loadPokemonItens(offset, newLimit)
-
-        loadMoreButton.parentElement.removeChild(loadMoreButton)
-    } else {
-        loadPokemonItens(offset, limit)
-    }
+const resetList = document.getElementById('btn-reset')
+resetList.addEventListener('click', () => {
+        cleanList()
+        buildList()
 })
+
+
+const nextPage = document.getElementById('btn-next')
+nextPage.addEventListener('click', () => {
+        if (previousPage.disabled === true) previousPage.disabled = false
+
+        currentListIndex += pokemonListLimit
+        renderizarItemPokemon(currentPokeList, currentListIndex, pokemonListLimit)
+
+        if (currentListIndex >= currentPokeList.length - 1) nextPage.disabled = true
+})
+
+const previousPage = document.getElementById('btn-prev')
+previousPage.addEventListener('click', () => {
+        if (nextPage.disabled === true) nextPage.disabled = false
+
+        currentListIndex -= pokemonListLimit
+        renderizarItemPokemon(currentPokeList, currentListIndex, pokemonListLimit)
+
+        if (currentListIndex === 0) previousPage.disabled = true
+})
+function createList() {
+        const filterOption = document.querySelector('input[name="filter"]:checked')?.value
+        const searchValue = document.getElementById('src-poke').value
+
+        if (!filterOption) {
+                alert('Escolha um filtro para pesquisa.')
+                return false
+        }
+
+        currentListIndex = 0
+
+        const filteredList = filterPokedex(filterOption, searchValue)
+        renderizarItemPokemon(filteredList, currentListIndex, pokemonListLimit)
+
+        if (filteredList.Length < 20) nextPage.disabled = true
+}
+
+
