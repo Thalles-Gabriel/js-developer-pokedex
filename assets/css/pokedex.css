@@ -7,6 +7,7 @@
     padding: 1rem;
     border-radius: 1rem;
     height: 17rem;
+
 }
 
 .pokemon .number {
@@ -22,6 +23,7 @@
 }
 
 .pokemon .name {
+    text-transform: capitalize;
     color: #fff;
     margin-left: auto;
     border-radius: 40%;

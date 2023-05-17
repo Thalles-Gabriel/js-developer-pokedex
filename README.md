@@ -1,3 +1,4 @@
+
 # Projeto PokeFilter
 
 Projeto criado na trilha educacional da DIO focada no aprendizado de front-end em preparação para a framework Angular.
@@ -33,3 +34,4 @@ Pelos dois botões *Próximo* e *Anterior* é possível navegar pelos resultados
 ### Foco do projeto
 
 Meu foco neste projeto foi aprender o máximo com o básico de Javascript antes de se adentrar nas várias frameworks do mercado. Aprender promessa, métodos assíncronos, renderização de componentes, utilizar API's já existentes e interpretação de seus dados. Aprimorei também algumas técnicas de css com Flexbox entre outros.
+
